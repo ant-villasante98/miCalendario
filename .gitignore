@@ -5,3 +5,5 @@
 /dist/
 #VARIABLES DE ENTORNO
 /development.env
+# Local Netlify folder
+.netlify
