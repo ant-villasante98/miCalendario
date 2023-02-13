@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const configEnv = require("./config");
 const Dotenv = require("dotenv-webpack");
 
-const isProduction = process.env.NODE_ENV == "production";
+const isProduction = !(process.env.NODE_ENV == "production");
 
 const stylesHandler = isProduction
   ? MiniCssExtractPlugin.loader
@@ -16,7 +16,7 @@ const config = {
   entry: "./src/index.js",
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename:'app.js'
+    filename: 'app.js'
   },
   devtool: 'inline-source-map',
   devServer: {
@@ -36,7 +36,8 @@ const config = {
     // ),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
-    })
+    }),
+    new MiniCssExtractPlugin()
 
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
@@ -53,11 +54,13 @@ const config = {
       },
       {
         test: /\.css$/i,
-        use: ["style-loader","css-loader"],
+        use: [MiniCssExtractPlugin.loader,"css-loader"],
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+        // eot|svg|ttf|woff|woff2
+        test: /\.(png|jpg|gif)$/i,
         type: "asset",
+        use: 'file-loader'
       },
       {
         test: /\.html$/i,
@@ -67,6 +70,10 @@ const config = {
         test: /\.tsx?$/,
         use: 'ts-loader',
         exclude: /node_modules/
+      },
+      {
+        test: /\.(svg|eot|woff|woff2|ttf)$/,
+        use: ['file-loader']
       }
 
       // Add your rules for custom modules here
@@ -78,10 +85,12 @@ const config = {
 module.exports = () => {
   if (isProduction) {
     config.mode = "production";
-
-    config.plugins.push(new MiniCssExtractPlugin());
+    console.log('-----MODO PRODUCTION')
+    
+    // config.plugins.push(new MiniCssExtractPlugin());
   } else {
+    console.log('-----MODO DESARROLLO:')
     config.mode = "development";
-  }
+}
   return config;
 };

@@ -1,5 +1,6 @@
 import { Event } from '../../models/Events';
-import * as apiGoogleService from '../../services/apiGoogle-services'
+import * as apiGoogleService from '../../services/apiGoogle-services';
+import { faAngleRight, faAngleLeft } from '../.././assets/svg/iconsSVG.js'
 
 let events: Event[];
 
@@ -76,9 +77,9 @@ function renderMonth(y: number = today.year, m: number = today.month, d: number 
 
     let days: number[] = Array.from({ length: daysOfMonth }, (v, i) => i + 1);
     const title: string = `<h1 class='nameMonth'>
-    <a id="calendar-month-past"><i class="fa-solid fa-angle-left"></i></a>
+    <a id="calendar-month-past">${faAngleLeft}</a>
     <font> ${nameMonth} ${y}</font>
-    <a id="calendar-month-next"><i class="fa-solid fa-angle-right"></i></a>
+    <a id="calendar-month-next">${faAngleRight}</i></a>
     </h1>`;
 
 
@@ -121,7 +122,6 @@ function renderMonth(y: number = today.year, m: number = today.month, d: number 
     })
     document.querySelector('#calendar-month-past').addEventListener('click', (e) => {
         pastMonth();
-        console.log('click');
 
     })
 
@@ -134,9 +134,7 @@ function getDate(): any {
         .then((res) => res.json())
         .then(resJson => {
             events = resJson.items;
-            // console.log('Eventos:--', events)
             insertEvents()
-            return
 
         })
 
@@ -152,7 +150,7 @@ function insertEvents(): void {
         let dateObjec = {
             year: Number.parseInt(dateISO.substring(0, 4)),
             month: Number.parseInt(dateISO.substring(5, 7)),
-            day: Number.parseInt(dateISO.substring(9))
+            day: Number.parseInt(dateISO.substring(8))
         }
         let FlagMultiEvent: boolean = dateObjec.day != dateRepeat;
         if (FlagMultiEvent) {
@@ -170,7 +168,6 @@ function insertEvents(): void {
 
 
         let dateFormatLong = intlFormat.format(new Date(dateObjec.year, dateObjec.month - 1, dateObjec.day));
-        console.log(dateFormatLong);
         if (FlagMultiEvent) {
             itemEvents += `<span class="span-calendar-event" id="span-calendar-event-${dateISO}"></span><div class="article-calendar-event" id="calendar-event-${dateISO}"><h4>${dateFormatLong}</h4><p>* ${e.summary}</p>`;
         }
@@ -183,7 +180,6 @@ function insertEvents(): void {
         dateRepeat = dateObjec.day;
 
     });
-    console.log('-----aqui-----')
     htmlEvent.innerHTML = itemEvents
 }
 function FormatDate(fDate: Date): string {
@@ -203,12 +199,10 @@ function nextMonth(): void {
         .then((res) => res.json())
         .then(resJson => {
             events = resJson.items;
-            // console.log('Eventos:--', events)
             insertEvents()
             return
 
         })
-    // console.log('next----')
 
 }
 function pastMonth(): void {
@@ -224,11 +218,9 @@ function pastMonth(): void {
         .then((res) => res.json())
         .then(resJson => {
             events = resJson.items;
-            // console.log('Eventos:--', events)
             insertEvents()
             return
 
         })
-    // console.log('next----')
 
 }
