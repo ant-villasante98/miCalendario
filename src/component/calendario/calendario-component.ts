@@ -122,7 +122,6 @@ function renderMonth(y: number = today.year, m: number = today.month, d: number 
     })
     document.querySelector('#calendar-month-past').addEventListener('click', (e) => {
         pastMonth();
-        console.log('click');
 
     })
 
@@ -135,9 +134,7 @@ function getDate(): any {
         .then((res) => res.json())
         .then(resJson => {
             events = resJson.items;
-            console.log('Eventos:--', events)
             insertEvents()
-            return
 
         })
 
@@ -149,9 +146,7 @@ function insertEvents(): void {
     let dateRepeat = 0;
 
     events.forEach((e, i) => {
-        console.log(e.start.dateTime, e.summary)
         let dateISO: string = e.start.dateTime.substring(0, 10);
-        console.log(dateISO.substring(8))
         let dateObjec = {
             year: Number.parseInt(dateISO.substring(0, 4)),
             month: Number.parseInt(dateISO.substring(5, 7)),
@@ -173,7 +168,6 @@ function insertEvents(): void {
 
 
         let dateFormatLong = intlFormat.format(new Date(dateObjec.year, dateObjec.month - 1, dateObjec.day));
-        // console.log(dateFormatLong);
         if (FlagMultiEvent) {
             itemEvents += `<span class="span-calendar-event" id="span-calendar-event-${dateISO}"></span><div class="article-calendar-event" id="calendar-event-${dateISO}"><h4>${dateFormatLong}</h4><p>* ${e.summary}</p>`;
         }
@@ -186,7 +180,6 @@ function insertEvents(): void {
         dateRepeat = dateObjec.day;
 
     });
-    console.log('-----aqui-----')
     htmlEvent.innerHTML = itemEvents
 }
 function FormatDate(fDate: Date): string {
@@ -206,12 +199,10 @@ function nextMonth(): void {
         .then((res) => res.json())
         .then(resJson => {
             events = resJson.items;
-            // console.log('Eventos:--', events)
             insertEvents()
             return
 
         })
-    // console.log('next----')
 
 }
 function pastMonth(): void {
@@ -227,11 +218,9 @@ function pastMonth(): void {
         .then((res) => res.json())
         .then(resJson => {
             events = resJson.items;
-            // console.log('Eventos:--', events)
             insertEvents()
             return
 
         })
-    // console.log('next----')
 
 }
